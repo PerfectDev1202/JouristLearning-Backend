@@ -1,0 +1,9 @@
+media/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+__pycache__/
