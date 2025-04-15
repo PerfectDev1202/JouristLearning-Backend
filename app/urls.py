@@ -8,14 +8,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Jourist Learn API",
-      default_version='v1',
-      description="API documentation for Jourist Learn",
-      contact=openapi.Contact(email="you@example.com"),
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],
+    openapi.Info(
+        title="Jourist Learn API",
+        default_version='v1',
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+    url='https://jourist-learn-backend.jourist.cloud',  
 )
 
 urlpatterns = [

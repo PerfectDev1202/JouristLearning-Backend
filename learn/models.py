@@ -10,8 +10,8 @@ class Topic(models.Model):
     ar = models.CharField(max_length=255)
     fa = models.CharField(max_length=255)
 
-    image_2d = models.ImageField(upload_to='topics/2d/', null=True, blank=True)
-    image_3d = models.ImageField(upload_to='topics/3d/', null=True, blank=True)
+    image_2d = models.ImageField(upload_to='images/2d/', null=True, blank=True)
+    image_3d = models.ImageField(upload_to='images/3d/', null=True, blank=True)
     is_shared = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name='topics')
 
@@ -26,8 +26,8 @@ class SubTopic(models.Model):
     ar = models.CharField(max_length=255)
     fa = models.CharField(max_length=255)
 
-    image_2d = models.ImageField(upload_to='subtopics/2d/', null=True, blank=True)
-    image_3d = models.ImageField(upload_to='subtopics/3d/', null=True, blank=True)
+    image_2d = models.ImageField(upload_to='images/2d/', null=True, blank=True)
+    image_3d = models.ImageField(upload_to='images/3d/', null=True, blank=True)
     is_shared = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name='subtopics')
 
@@ -41,9 +41,15 @@ class Phrase(models.Model):
     ua = models.TextField()
     ar = models.TextField()
     fa = models.TextField()
+    
+    audio_de = models.FileField(upload_to='audio/de/', null=True, blank=True)
+    audio_ru = models.FileField(upload_to='audio/ru/', null=True, blank=True)
+    audio_ua = models.FileField(upload_to='audio/ua/', null=True, blank=True)
+    audio_ar = models.FileField(upload_to='audio/ar/', null=True, blank=True)
+    audio_fa = models.FileField(upload_to='audio/fa/', null=True, blank=True)
 
-    image_2d = models.ImageField(upload_to='phrases/2d/', null=True, blank=True)
-    image_3d = models.ImageField(upload_to='phrases/3d/', null=True, blank=True)
+    image_2d = models.ImageField(upload_to='images/2d/', null=True, blank=True)
+    image_3d = models.ImageField(upload_to='images/3d/', null=True, blank=True)
     is_shared = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name='phrases')
 
