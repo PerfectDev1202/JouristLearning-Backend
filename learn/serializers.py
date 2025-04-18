@@ -9,11 +9,14 @@ class TopicSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SubTopicSerializer(serializers.ModelSerializer):
+    topic = TopicSerializer(read_only=True)
     class Meta:
         model = SubTopic
         fields = '__all__'
 
 class PhraseSerializer(serializers.ModelSerializer):
+    topic = TopicSerializer(read_only=True)
+    subtopic = SubTopicSerializer(read_only=True)
     class Meta:
         model = Phrase
         fields = '__all__'

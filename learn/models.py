@@ -10,6 +10,8 @@ class Topic(models.Model):
     ar = models.CharField(max_length=255)
     fa = models.CharField(max_length=255)
 
+    contentID = models.CharField(max_length=255, null=True, blank=True)
+
     image_2d = models.ImageField(upload_to='images/2d/', null=True, blank=True)
     image_3d = models.ImageField(upload_to='images/3d/', null=True, blank=True)
     is_shared = models.BooleanField(default=True)
@@ -26,6 +28,8 @@ class SubTopic(models.Model):
     ar = models.CharField(max_length=255)
     fa = models.CharField(max_length=255)
 
+    contentID = models.CharField(max_length=255, null=True, blank=True)
+
     image_2d = models.ImageField(upload_to='images/2d/', null=True, blank=True)
     image_3d = models.ImageField(upload_to='images/3d/', null=True, blank=True)
     is_shared = models.BooleanField(default=True)
@@ -35,7 +39,11 @@ class SubTopic(models.Model):
         return self.de
 
 class Phrase(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='phrases')
     subtopic = models.ForeignKey(SubTopic, on_delete=models.CASCADE, related_name='phrases')
+
+    contentID = models.CharField(max_length=255, null=True, blank=True)
+
     de = models.TextField()
     ru = models.TextField()
     ua = models.TextField()
