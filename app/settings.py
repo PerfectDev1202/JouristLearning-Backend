@@ -171,3 +171,12 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.ionos.de'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'learn@jourist.de'
+EMAIL_HOST_PASSWORD = '45ZUlku78*zI'
+DEFAULT_FROM_EMAIL = 'learn@jourist.de'
+EMAIL_SENDER = 'Jourist Learn <learn@jourist.de>'

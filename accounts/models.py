@@ -40,17 +40,20 @@ class CustomUserManager(BaseUserManager):
 # Custom user model
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    full_name = models.CharField(max_length=150, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
+    is_premium = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    role = models.CharField(max_length=100, blank=True, null=True)
 
     avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     primary_language = models.CharField(max_length=50, blank=True, null=True)
     foreign_language = models.CharField(max_length=50, blank=True, null=True)
+    ui_language = models.CharField(max_length=50, default='en')
 
     objects = CustomUserManager()
 
@@ -59,3 +62,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class NotificationSettings(models.Model):
+    email_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
+    learning_reminders = models.BooleanField(default=True)
+    weekly_progress = models.BooleanField(default=True)
+    new_features = models.BooleanField(default=True)
+    marketing = models.BooleanField(default=False)
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='notification_settings', primary_key=True)
+
+    def __str__(self):
+        return f"{self.user.email} Notification Settings"

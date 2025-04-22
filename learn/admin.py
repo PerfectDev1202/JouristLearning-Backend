@@ -15,5 +15,5 @@ class SubTopicAdmin(admin.ModelAdmin):
 @admin.register(Phrase)
 class PhraseAdmin(admin.ModelAdmin):
     list_display = ('id', 'contentID', 'topic', 'subtopic', 'de', 'is_shared', 'owner')
-    search_fields = ('de', 'ru', 'ua', 'ar', 'fa')
+    search_fields = ('contentID','de', 'ru', 'ua', 'ar', 'fa')
     list_filter = ('subtopic', 'is_shared')

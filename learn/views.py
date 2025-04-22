@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Count
+from django.db.models import Count, Q
 
 import random
 from .serializers import TopicSerializer
@@ -41,7 +41,7 @@ def get_shared_phrases_by_subtopic(request, subtopic_id):
 @permission_classes([AllowAny])
 def get_shared_subtopics_by_topic(request, topic_id):
     subtopics = SubTopic.objects.filter(topic_id=topic_id, is_shared=True).annotate(
-        phrase_count=Count('phrases', distinct = True)
+        phrase_count=Count('phrases', filter=Q(phrases__is_shared=True, phrases__owner__isnull=True), distinct = True)
     )
     data = []
     for subtopic in subtopics:
@@ -54,8 +54,8 @@ def get_shared_subtopics_by_topic(request, topic_id):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_shared_subtopic_by_id(request, subtopic_id):
-    subtopic = SubTopic.objects.filter(id=subtopic_id).annotate(
-        phrase_count=Count('phrases', distinct=True)
+    subtopic = SubTopic.objects.filter(id=subtopic_id, is_shared=True).annotate(
+        phrase_count=Count('phrases', filter=Q(phrases__is_shared=True, phrases__owner__isnull=True), distinct=True)
     ).first()
     if not subtopic:
         return Response({"error": "Subtopic not found"}, status=404)
@@ -71,8 +71,8 @@ def get_shared_subtopic_by_id(request, subtopic_id):
 @permission_classes([AllowAny])
 def get_shared_topics(request):
     topics = Topic.objects.filter(is_shared=True).annotate(
-        subtopic_count=Count('subtopics', distinct = True),
-        phrase_count=Count('phrases', distinct = True)
+        subtopic_count=Count('subtopics', filter=Q(subtopics__is_shared=True, subtopics__owner__isnull=True), distinct = True),
+        phrase_count=Count('phrases', filter=Q(phrases__is_shared=True, phrases__owner__isnull=True), distinct = True)
     )
     data = []
     for topic in topics:
@@ -96,9 +96,9 @@ def get_random_shared_phrases(request):
         return Response([])
 
     if count >= total:
-        phrases = Phrase.objects.all()
+        phrases = Phrase.objects.filter(is_shared=True)
     else:
-        ids = list(Phrase.objects.values_list('id', flat=True))
+        ids = list(Phrase.objects.filter(is_shared=True).values_list('id', flat=True))
         random_ids = random.sample(ids, count)
         phrases = Phrase.objects.filter(id__in=random_ids)
 
@@ -114,9 +114,9 @@ import requests
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_missing_phrase_3d_files(request):
-    phrases_with_paths = Phrase.objects.exclude(image_3d__isnull=True).exclude(image_3d='')
-    subtopics_with_paths = SubTopic.objects.exclude(image_3d__isnull=True).exclude(image_3d='')
-    topics_with_paths = Topic.objects.exclude(image_3d__isnull=True).exclude(image_3d='')
+    phrases_with_paths = Phrase.objects.filter(is_shared=True).exclude(image_3d__isnull=True).exclude(image_3d='')
+    subtopics_with_paths = SubTopic.objects.filter(is_shared=True).exclude(image_3d__isnull=True).exclude(image_3d='')
+    topics_with_paths = Topic.objects.filter(is_shared=True).exclude(image_3d__isnull=True).exclude(image_3d='')
 
     missing = []
 

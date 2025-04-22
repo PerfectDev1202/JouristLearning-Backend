@@ -1,25 +1,22 @@
 # accounts/serializers.py
 
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, NotificationSettings
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'first_name', 'last_name', 'password', 'primary_language', 'foreign_language']
+        fields = ['email', 'password', 'role', 'full_name']
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
+        return CustomUser.objects.create_user(
             email=validated_data['email'],
+            full_name=validated_data['full_name'],
             password=validated_data['password'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            primary_language=validated_data.get('primary_language'),
-            foreign_language=validated_data.get('foreign_language'),
+            role=validated_data.get('role', 'user')  # default to 'user' if not provided
         )
-        return user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,4 +26,9 @@ class UserSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'avatar', 'country', 'city', 'primary_language', 'foreign_language']
+        fields = ['full_name', 'avatar', 'country', 'city', 'primary_language', 'foreign_language', 'ui_language']
+
+class NotificationSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotificationSettings
+        fields = ['email_notifications', 'push_notifications', 'learning_reminders', 'weekly_progress', 'new_features', 'marketing']
