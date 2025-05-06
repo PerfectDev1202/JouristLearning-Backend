@@ -51,8 +51,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to=avatar_upload_path, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
-    primary_language = models.CharField(max_length=50, blank=True, null=True)
-    foreign_language = models.CharField(max_length=50, blank=True, null=True)
+    primary_language = models.CharField(max_length=50, default='de')
+    foreign_language = models.CharField(max_length=50, default='ua')
     ui_language = models.CharField(max_length=50, default='en')
 
     objects = CustomUserManager()
